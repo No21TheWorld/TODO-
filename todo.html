@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8" />
+ <title>TODO</title>
+ <style>
+  body {  
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+  }
+  input,button{
+      padding: 8px;
+      margin: 5px;
+  }
+  ul{
+      list-style: none;
+      padding: 0;
+  }
+     li {
+         margin: 5px 0;
+         background: white;
+         padding: 10px;
+         border-radius: 5px;
+     }
+  </style>
+</head>
+<body>
+
+<h1>TODO</h1>
+<input  type="text" id="taskinput" placeholder="‚â‚é‚±‚Æ‚ð“ü—Í" />
+<button onclick="addtask()">’Ç‰Á</button>
+<ul id="tasklist"></ul>
+
+<script>
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
+
+    function addTask() {
+        const text = taskInput.value.trim();
+        if (text === "") return;
+
+    const li = document.createElement("li");
+    li.textContent = text;
+    li.oncancel = () => {
+        li.remove();
+        saveTasks();
+    };
+
+
+    taskList.appendchild(li);
+    taskInput.value = "";
+    saveTasks();
+   
+    function saveTasks() {
+        const tasks = Array.from(taskList.children).map(li => li.textContent);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+        tasks.forEach(text => {
+            const li = document.createElement("li");
+            li.textContent = text;
+            li.onclick = () => {
+                li.remove();
+                saveTasks();
+            };
+            taskList.appendChild(li);
+        });
+    }
+
+    loadTasks();
+</script>
+</body>
+</html>
